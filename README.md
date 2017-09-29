@@ -16,14 +16,15 @@
 |pickerTitleText       |            |string  |pls select         |
 |pickerConfirmBtnColor |            |array   |[1, 186, 245, 1]   |
 |pickerCancelBtnColor  |            |array   |[1, 186, 245, 1]   |
-|pickerTitleColor      |            |array   |[20, 20, 20, 1])   |
+|pickerTitleColor      |            |array   |[20, 20, 20, 1]    |
 |pickerToolBarBg       |            |array   |[232, 232, 232, 1] |
 |pickerBg              |            |array   |[196, 199, 206, 1] |
 |pickerToolBarFontSize |            |number  |16                 |
+|wheelFlex             |            |array   |[1, 1, 1]          |
 |pickerFontSize        |            |number  |16                 |
 |pickerFontColor       |            |array   |[31, 31, 31, 1]    |
 |pickerData            |            |array   |                   |
-|selectedValue         |            |string  |                   |
+|selectedValue         |            |array   |                   |
 |onPickerConfirm       |            |function|                   |
 |onPickerCancel        |            |function|                   |
 |onPickerSelect        |            |function|                   |
@@ -78,6 +79,23 @@
     });
     Picker.show();
 	
+```
+
+### Integration With Existing Apps (`iOS`)
+The `Podfile` will like below:
+``` ruby
+platform :ios, '8.0'
+target 'YourTarget' do
+    pod 'React', :path => '../YOUR_REACT_NATIVE_PROJECT/node_modules/react-native', :subspecs => [
+    'Core',
+    ...
+    ]
+    pod 'Picker', :path => '../YOUR_REACT_NATIVE_PROJECT/node_modules/react-native-picker'
+end
+```
+After you have updated the `Podfile` of the existing app, you can install `react-native-picker` like below:
+``` bash
+$ pod install
 ```
 
 ### Notice

@@ -366,7 +366,7 @@
             {
                 
                 NSInteger setline=[_pick selectedRowInComponent:0];
-                    
+                
                 self.selectthreeAry =[[self.dataDry objectAtIndex:setline]objectForKey:[self.provinceArray objectAtIndex:setline]];
                 
                 //NSLog(@"%@",_selectthreeAry);
@@ -456,10 +456,17 @@
     [dic setValue:self.backArry forKey:@"selectedValue"];
     
     [dic setValue:@"select" forKey:@"type"];
+    NSMutableArray *value = [self getselectIndexArry];
     
-    [dic setValue:[self getselectIndexArry] forKey:@"selectedIndex"];
+    if([value count] == 0) {
+        value = [[NSMutableArray alloc] init];
+        [dic setValue:[NSNumber numberWithInt:[_pick selectedRowInComponent:0]] forKey:@"selectedIndex"];
+    } else {
+        [dic setValue:value forKey:@"selectedIndex"];
+    }
+    
     if (self.backArry.count>0) {
-         self.bolock(dic);
+        self.bolock(dic);
     }
 }
 //判断进来的类型是那种
@@ -471,6 +478,8 @@
     id firstobject=[self.dataDry firstObject];
 
     _seleNum = 1; //Default value, data is a simple array
+    
+    _seleNum = 1;
     
     if ([firstobject isKindOfClass:[NSArray class]]) {
         
@@ -605,6 +614,11 @@
 //按了确定按钮
 -(void)cfirmAction
 {
+    //判断当前是否在滚动选择 如果是 则禁用确定按钮
+    if ([self anySubViewScrolling:self.pick]) {
+        return ;
+    }
+    
     NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
     
     if (self.backArry.count>0) {
@@ -613,7 +627,7 @@
         [dic setValue:@"confirm" forKey:@"type"];
         NSMutableArray *arry=[[NSMutableArray alloc]init];
         [dic setValue:[self getselectIndexArry] forKey:@"selectedIndex"];
-        [dic setValue:arry forKey:@"selectedIndex"];
+//        [dic setValue:arry forKey:@"selectedIndex"];
         
         self.bolock(dic);
         
@@ -941,4 +955,18 @@
     
 }
 
+- (BOOL)anySubViewScrolling:(UIView *)view{
+    if ([view isKindOfClass:[UIScrollView class]]) {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        if (scrollView.dragging || scrollView.decelerating) {
+            return YES;
+        }
+    }
+    for (UIView *theSubView in view.subviews) {
+        if ([self anySubViewScrolling:theSubView]) {
+            return YES;
+        }
+    }
+    return NO;
+}
 @end
